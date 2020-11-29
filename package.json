@@ -8,19 +8,23 @@
     "@testing-library/user-event": "^12.2.2",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "path": "^0.12.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
+    "rimraf": "^3.0.2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start:client": "react-scripts start",
+    "start:dev_client": "react-scripts start",
+    "start:dev_api": "cross-env NODE_ENV=development nodemon --watch ./server.js --watch ./src/api --exec babel-node -r dotenv/config server",
+    "start:api": "cross-env NODE_ENV=production babel-node -r dotenv/config server dotenv_config_NODE_ENV=production",
     "build:client": "rimraf dist-client && react-scripts build && mv build dist-client",
     "build": "npm run build:client",
-    "start": "npm run build && babel-node server",
-    "start:dev": "nodemon --watch ./src npm start",
+    "start": "concurrently \"npm run start:dev_client\" \"npm run start:dev_api\"",
+    "start:prod": "npm run build && npm run start:api",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -47,7 +51,7 @@
     "@babel/core": "^7.12.9",
     "@babel/node": "^7.12.6",
     "@babel/preset-env": "^7.12.7",
-    "nodemon": "^2.0.6",
-    "rimraf": "^3.0.2"
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.6"
   }
 }

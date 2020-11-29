@@ -1,17 +1,20 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const path = require('path');
-const apiRouter = require(path.join(__dirname, '/src/api/baseRouter')).default;
+import express from 'express';
+import { urlencoded } from 'body-parser';
+import cors from 'cors';
+import apiRouter from './src/api/baseRouter';
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(urlencoded({ extended: false }));
 app.use(cors());
-app.use(express.static('./dist-client'));
 
 app.use('/api', apiRouter);
 
-app.use('*', express.static(path.join(__dirname, '/dist-client/index.html')));
+console.log(process.env.NODE_ENV);
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'production') {
+  app.use(express.static('./dist-client'));
+  app.use('*', express.static('./dist-client/index.html'));
+}
 
-app.listen(process.env.PORT || 3000, () => console.log(`listening on port ${process.env.PORT || 3000}`));
+const PORT = process.env.NODE_ENV && process.env.NODE_ENV === 'development' ? process.env.DEV_PORT || 3001 : process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`listening on port ${PORT}`));

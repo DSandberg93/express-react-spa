@@ -18,9 +18,9 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start:dev_client": "react-scripts start",
-    "start:dev_api": "cross-env NODE_ENV=development nodemon --watch ./server.js --watch ./src/api --exec babel-node -r dotenv/config server",
-    "start:api": "cross-env NODE_ENV=production babel-node -r dotenv/config server dotenv_config_NODE_ENV=production",
+    "start:dev_client": "cross-env REACT_APP_API_HOST=localhost REACT_APP_API_PORT=1337 react-scripts start",
+    "start:dev_api": "cross-env NODE_ENV=development HOST=localhost PORT=1337 nodemon --watch ./server.js --watch ./src/api --exec babel-node -r dotenv/config server",
+    "start:api": "cross-env NODE_ENV=production HOST=localhost PORT=1337 babel-node -r dotenv/config server dotenv_config_NODE_ENV=production",
     "build:client": "rimraf dist-client && react-scripts build && mv build dist-client",
     "build": "npm run build:client",
     "start": "concurrently \"npm run start:dev_client\" \"npm run start:dev_api\"",
